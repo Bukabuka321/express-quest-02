@@ -10,23 +10,23 @@ const database = mysql.createPool({
     database: process.env.DB_NAME,
   });
 
-database
-  .getConnection()
-  .then(() => {
-    console.log ("Can reach it?");
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+// database
+//   .getConnection()
+//   .then(() => {
+//     console.log ("Can reach it?");
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   });
 
-  database
-    .query("select * from movies")
-    .then((result) => {
-      const movies = result[0]
-      console.log(movies);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+//   database
+//     .query("select * from users")
+//     .then((result) => {
+//       const users = result[1]
+//       console.log(users);
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//     });
 
 module.exports = database;
