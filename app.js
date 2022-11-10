@@ -8,6 +8,7 @@ const port = process.env.APP_PORT ?? 3000;
 
 app.use(express.json());
 
+
 const userHandlers = require("./userHandlers");
 // const welcome = (req, res) => {
 //   res.send("Welcome to my favorite movie list");
@@ -26,6 +27,7 @@ app.get("/api/users", userHandlers.getUsers);
 app.get("/api/users/:id", userHandlers.getUsersById);
 app.post("/api/users", userHandlers.postUser);
 app.put("/api/users/:id", userHandlers.putUser);
+app.delete("/api/users/:id", userHandlers.deleteUser);
 
 
 app.listen(port, (err) => {

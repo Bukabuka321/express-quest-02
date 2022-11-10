@@ -62,4 +62,21 @@ const putUser = (req, res) => {
     })
 }
 
-module.exports = {getUsers, getUsersById, postUser, putUser};
+const deleteUser = (req, res) => {
+    const id = parseInt(req.params.id);
+    database
+    .query("DELETE FROM users WHERE id = ?", [id])
+    .then(([users]) => {
+        if (users.affectedRows === 0) {
+        res.status(404).send("Not found");
+       } else { 
+        res.sendStatus(200);
+       }
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error deleting the user");
+    })
+}
+
+module.exports = {getUsers, getUsersById, postUser, putUser, deleteUser};
