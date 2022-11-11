@@ -23,11 +23,13 @@ app.get("/", welcome);
 // const movieHandlers = require("./movieHandlers");
 
 // app.get("/api/movies", movieHandlers.getMovies);
-app.get("/api/users", userHandlers.getUsers);
+
+// app.get("/api/users", userHandlers.getUsers);
 app.get("/api/users/:id", userHandlers.getUsersById);
 app.post("/api/users", userHandlers.postUser);
 app.put("/api/users/:id", userHandlers.putUser);
 app.delete("/api/users/:id", userHandlers.deleteUser);
+app.get("/api/users", userHandlers.getUsersByParams);
 
 
 app.listen(port, (err) => {

@@ -79,4 +79,33 @@ const deleteUser = (req, res) => {
     })
 }
 
-module.exports = {getUsers, getUsersById, postUser, putUser, deleteUser};
+const getUsersByParams = (req, res) => {
+    let sql = "SELECT * FROM users";
+    const sqlValues = [];
+
+    if (req.query.language != null) {
+        sql += " WHERE language = ?";
+        sqlValues.push(req.query.language);
+
+        if(req.query.city != null) {
+            sql += " AND city = ?";
+            sqlValues.push(req.query.city);
+        }
+    } else if (req.query.city != null) {
+        sql += " WHERE city <= ?";
+        sqlValues.push(req.query.city);
+    }
+
+    database
+    .query(sql, sqlValues)
+    .then((result) => {
+        const users = result[0]
+        res.json(users);
+    })
+    .catch((err) => { 
+        console.error(err);
+        res.status(500).send("Error retrieving data from database");
+    });
+}
+
+module.exports = {getUsers, getUsersById, postUser, putUser, deleteUser, getUsersByParams};
