@@ -1,5 +1,29 @@
 const database = require("./database");
 
+const Joi = require("joi");
+
+const userSchema = Joi.object({
+    email: Joi.string().email().max(255).required(),
+    firstname: Joi.string().max(255).required(),
+    lastname: Joi.string().max(255).required(),
+  });
+  
+  const validateUser = (req, res, next) => {
+    const { firstname, lastname, email } = req.body;
+  
+    const { error } = userSchema.validate(
+      { firstname, lastname, email },
+      { abortEarly: false }
+    );
+  
+    if (error) {
+      res.status(422).json({ validationErrors: error.details });
+    } else {
+      next();
+    }
+  };
+  
+
 const getUsers = (req, res) => {
     database
     .query("SELECT * FROM users")
@@ -30,7 +54,9 @@ const getUsersById = (req, res) => {
     })
 };
 
+
 const postUser = (req, res) => {
+
     const {firstname, lastname, email, city, language} = req.body;
     database
     .query("INSERT INTO users (firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)", [firstname, lastname, email, city, language])
@@ -41,6 +67,7 @@ const postUser = (req, res) => {
         console.error(err);
         res.status(500).send("Error saving the users");
     })
+
 };
 
 const putUser = (req, res) => {
@@ -108,4 +135,4 @@ const getUsersByParams = (req, res) => {
     });
 }
 
-module.exports = {getUsers, getUsersById, postUser, putUser, deleteUser, getUsersByParams};
+module.exports = {getUsers, getUsersById, postUser, putUser, deleteUser, getUsersByParams, validateUser};

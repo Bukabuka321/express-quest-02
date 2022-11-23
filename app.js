@@ -2,6 +2,10 @@ require("dotenv").config();
 
 const express = require("express");
 
+const {body, validationResults} = require("express-validator");
+
+const Joi = require("joi");
+
 const app = express();
 
 const port = process.env.APP_PORT ?? 3000;
@@ -25,9 +29,26 @@ app.get("/", welcome);
 // app.get("/api/movies", movieHandlers.getMovies);
 
 // app.get("/api/users", userHandlers.getUsers);
+
+const validateUser = ([
+  body("email").isEmail(),
+  body("firstname").isLength({ max: 255 }),
+  body("lastname").isLength({ max: 255 }),
+  (req, res, next) => {
+    const errors = validationResults(req);
+
+    if (!errors.isEmpty()) {
+      res.status(422).json({ validationErrors: errors.array() });
+    } else {
+      next();
+    }
+  },
+]);
+
+
 app.get("/api/users/:id", userHandlers.getUsersById);
-app.post("/api/users", userHandlers.postUser);
-app.put("/api/users/:id", userHandlers.putUser);
+app.post( "/api/users", validateUser, userHandlers.postUser);
+app.put("/api/users/:id", validateUser, userHandlers.putUser);
 app.delete("/api/users/:id", userHandlers.deleteUser);
 app.get("/api/users", userHandlers.getUsersByParams);
 
