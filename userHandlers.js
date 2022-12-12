@@ -57,9 +57,9 @@ const getUsersById = (req, res) => {
 
 const postUser = (req, res) => {
 
-    const {firstname, lastname, email, city, language} = req.body;
+    const {firstname, lastname, email, city, language, hashedPassword} = req.body;
     database
-    .query("INSERT INTO users (firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)", [firstname, lastname, email, city, language])
+    .query("INSERT INTO users (firstname, lastname, email, city, language, hashedPassword) VALUES (?, ?, ?, ?, ?, ?)", [firstname, lastname, email, city, language, hashedPassword])
     .then(([users]) => {
         res.location(`/api/users/${users.insertId}`).sendStatus(201);
     })
